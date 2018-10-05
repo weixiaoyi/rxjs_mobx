@@ -1,8 +1,9 @@
-import { observable } from "mobx"
+import { observable } from 'mobx'
+import ModelExtend from './ModelExtend'
 
-export default class DashBoard {
+export default class DashBoard extends ModelExtend {
   constructor(rootStore) {
-    this.rootStore = rootStore
+    super(rootStore)
   }
 
   @observable todos2 = []

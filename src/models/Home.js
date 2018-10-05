@@ -1,20 +1,13 @@
 import { observable, action, toJS, } from 'mobx'
+import ModelExtend from './ModelExtend'
 
-export default class Home {
+export default class Home extends ModelExtend {
   constructor(rootStore) {
-    this.rootStore = rootStore
+    super(rootStore)
   }
 
   @observable todos = [
     { name: '1' },
     { name: '2' }
   ]
-
-  @action
-  changeTodos = () => {
-    this.todos = [
-      { name: '3' },
-      { name: '4' }
-    ]
-  }
 }
