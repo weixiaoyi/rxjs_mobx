@@ -1,26 +1,25 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { toJS } from 'mobx'
+import { observer, inject } from 'mobx-react'
+import './App.css'
 
+
+@observer(['homeStore'])
 class App extends Component {
   render() {
+    const { homeStore: { todos, changeTodos } } = this.props
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <div className="App1" >
+        {
+          todos.map((item, index) => (
+            <div key={index} onClick={() => {
+              changeTodos()
+            }} >
+              {item.name}
+            </div >
+          ))
+        }
+      </div >
     );
   }
 }
