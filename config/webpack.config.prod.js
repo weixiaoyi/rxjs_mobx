@@ -42,7 +42,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // style files regexes
-const cssRegex = /\.css$/;
+const cssRegex = /\.(css|less)$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
@@ -60,6 +60,9 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
     {
       loader: require.resolve('css-loader'),
       options: cssOptions,
+    },
+    {
+      loader: require.resolve('less-loader')
     },
     {
       // Options for PostCSS as we reference these options twice
@@ -340,6 +343,7 @@ module.exports = {
             exclude: cssModuleRegex,
             loader: getStyleLoaders({
               importLoaders: 1,
+              modules: true,
               sourceMap: shouldUseSourceMap,
             }),
             // Don't consider CSS imports dead code even if the

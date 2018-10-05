@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
-import './App.css'
+import * as styles from './index.less'
 
-@observer(['homeStore'])
-class App extends Component {
+
+export default @observer(['homeStore'])
+
+class View extends Component {
   render() {
     const { homeStore: { todos, changeTodos } } = this.props
 
     return (
-      <div className="App1" >
+      <div className={styles.home} >
         {
           todos.map((item, index) => (
             <div key={index} onClick={() => {
@@ -24,4 +26,4 @@ class App extends Component {
   }
 }
 
-export default App
+
