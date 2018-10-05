@@ -1,4 +1,4 @@
-import { observable, action, toJS, } from 'mobx'
+import { observable, action, } from 'mobx'
 import ModelExtend from './ModelExtend'
 
 export default class Home extends ModelExtend {
