@@ -1,4 +1,4 @@
-import { observable,toJS } from 'mobx'
+import { observable, action, toJS, } from 'mobx'
 
 export default class Home {
   constructor(rootStore) {
@@ -10,7 +10,7 @@ export default class Home {
     { name: '2' }
   ]
 
-
+  @action
   changeTodos = () => {
     this.todos = [
       { name: '3' },

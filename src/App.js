@@ -3,11 +3,11 @@ import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import './App.css'
 
-
 @observer(['homeStore'])
 class App extends Component {
   render() {
     const { homeStore: { todos, changeTodos } } = this.props
+
     return (
       <div className="App1" >
         {
@@ -20,8 +20,8 @@ class App extends Component {
           ))
         }
       </div >
-    );
+    )
   }
 }
 
-export default App;
+export default App
