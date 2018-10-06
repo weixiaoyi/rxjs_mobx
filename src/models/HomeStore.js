@@ -13,8 +13,6 @@ export default class Home extends ModelExtend {
     { name: '2' }
   ]
 
-
-  @action
   getExample = async () => {
     const data = getRes(await getExample())
     if (resOk(data)) {

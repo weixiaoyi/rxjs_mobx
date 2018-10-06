@@ -2,9 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
 import { configure } from 'mobx'
-import './index.less'
-import { default as store } from './models'
+
 import { default as Home } from '@routes/Home'
+import { default as store } from './models'
+import './index.less'
 import * as serviceWorker from './serviceWorker'
 import 'normalize.css'
 
@@ -13,5 +14,6 @@ configure({ enforceActions: 'always' })
 
 
 ReactDOM.render(
-  <Provider {...store}><Home /></Provider >, document.getElementById('root'))
-serviceWorker.unregister();
+  <Provider {...store}><Home /></Provider >,
+  document.getElementById('root'))
+serviceWorker.unregister()

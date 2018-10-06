@@ -1,10 +1,10 @@
-import Home from './Home'
-import DashBoard from './DashBoard'
+import HomeStore from './HomeStore'
+import DashBoardStore from './DashBoardStore'
 
 class RootStore {
   constructor() {
-    this.homeStore = new Home(this)
-    this.dashBoardStore = new DashBoard(this)
+    this.homeStore = new HomeStore(this)
+    this.dashBoardStore = new DashBoardStore(this)
   }
 }
 
