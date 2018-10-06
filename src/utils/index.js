@@ -1,5 +1,8 @@
 import { lodash_helper, immutable, moment_helper } from './helper'
+import { observer, inject, } from 'mobx-react'
 
+export { toJS } from 'mobx'
+//------------------通用部分
 export { request } from './request'
 export const _ = lodash_helper
 export const moment = moment_helper
@@ -28,7 +31,6 @@ export const resOk = (res, method) => {
   return true
 }
 
-
 export const isEqual = (obj1, obj2) => {
   if (_.isObjectLike(obj1) || _.isObjectLike(obj2)) {
     const { fromJS, is } = Imu
@@ -45,6 +47,15 @@ export const deepClone = (obj) => {
       .toJS()
   } else {
     return obj
+  }
+}
+
+// ----------------------------项目适用
+
+
+export const Inject = (func) => {
+  return (c) => {
+    return inject(func)(observer(c))
   }
 }
 
