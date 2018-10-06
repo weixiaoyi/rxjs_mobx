@@ -1,6 +1,5 @@
-import { observable, action, runInAction } from 'mobx'
+import { resOk, getRes, _, observable, action, runInAction } from '@utils'
 import { getExample } from '@services/home'
-import { resOk, getRes, _ } from '@utils'
 import ModelExtend from './ModelExtend'
 
 export default class Home extends ModelExtend {

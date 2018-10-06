@@ -1,7 +1,7 @@
 import { lodash_helper, immutable, moment_helper } from './helper'
 import { observer, inject, } from 'mobx-react'
 
-export { toJS } from 'mobx'
+
 //------------------通用部分
 export { request } from './request'
 export const _ = lodash_helper
@@ -51,7 +51,7 @@ export const deepClone = (obj) => {
 }
 
 // ----------------------------项目适用
-
+export { toJS ,observable, action, runInAction} from 'mobx'
 
 export const Inject = (func) => {
   return (c) => {
