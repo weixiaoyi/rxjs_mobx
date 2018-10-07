@@ -1,9 +1,8 @@
-import { resOk, getRes, _, observable, action, runInAction, processResult } from '@utils'
+import { resOk, getRes, _, observable, action, runInAction, processResult, R } from '@utils'
 import { getExample1, getExample2 } from '@services/home'
 import ModelExtend from './ModelExtend'
 
-import { forkJoin } from 'rxjs'
-import { map, filter, switchMap } from 'rxjs/operators'
+const { forkJoin, map, from, race } = R
 
 export default class Home extends ModelExtend {
   constructor(rootStore) {
@@ -15,13 +14,20 @@ export default class Home extends ModelExtend {
     { name: '2' }
   ]
 
-  getExample = () => {
+  getExampleSync = () => {
     forkJoin(getExample1(), getExample2())
       .pipe(map(v => {
         return v.map(item => processResult(item))
       }))
-      .subscribe(v => console.log(v))
+      .subscribe(([a, b]) => this.changeModel('todos', a.concat(b)))
+  }
 
+  getExampleRace = () => {
+    from(getExample1())
+      .pipe(
+        race(getExample2()),
+        map(v => processResult(v)))
+      .subscribe(v => this.changeModel('todos', v))
   }
 
   getExample1 = async () => {

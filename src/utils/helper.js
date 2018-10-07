@@ -2,6 +2,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import store from 'store'
 import { fromJS, is } from 'immutable'
+import { forkJoin, from } from 'rxjs'
+import { map, race } from 'rxjs/operators'
 
 export const lodash_helper = {
   invert: _.invert,
@@ -45,6 +47,13 @@ export const lodash_helper = {
   cloneDeep: _.cloneDeep,
   uniqueId: _.uniqueId,
   isFunction: _.isFunction
+}
+
+export const Rxjs_helper = {
+  from,
+  forkJoin,
+  race,
+  map
 }
 
 export const localSave = {

@@ -9,19 +9,15 @@ class View extends Component {
   startInit = () => {
     const { model: { dispatch } } = this.props
 
+    // dispatch({
+    //     type: 'getExampleSync'
+    //   }
+    // )
+
     dispatch({
-        type: 'getExample'
+        type: 'getExampleRace'
       }
     )
-    // dispatch({
-    //     type: 'getExample1'
-    //   }
-    // )
-    //
-    // dispatch({
-    //     type: 'getExample2'
-    //   }
-    // )
   }
 
   render() {

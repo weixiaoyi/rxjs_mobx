@@ -1,4 +1,4 @@
-import { lodash_helper, rxjs_helper, immutable, moment_helper } from './helper'
+import { lodash_helper, rxjs_helper, immutable, moment_helper, Rxjs_helper } from './helper'
 import { observer, inject, } from 'mobx-react'
 
 
@@ -8,6 +8,7 @@ export const _ = lodash_helper
 export const moment = moment_helper
 export { localSave } from './helper'
 export const Imu = immutable
+export const R = Rxjs_helper
 
 export const getRes = function (res) {
   if (res) {
