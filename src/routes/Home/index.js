@@ -6,18 +6,26 @@ import * as styles from './index.less'
 export default @Inject(({ homeStore: model }) => ({ model }))
 
 class View extends Component {
-
   startInit = () => {
     const { model: { dispatch } } = this.props
+
     dispatch({
         type: 'getExample'
       }
     )
-    this.childInitStacks.forEach((item)=>item())
+    // dispatch({
+    //     type: 'getExample1'
+    //   }
+    // )
+    //
+    // dispatch({
+    //     type: 'getExample2'
+    //   }
+    // )
   }
 
   render() {
-    const { model: { todos, dispatch } } = this.props
+    const { model: { todos } } = this.props
     return (
       <Mixin.Parent that={this} >
         <div className={styles.home} >

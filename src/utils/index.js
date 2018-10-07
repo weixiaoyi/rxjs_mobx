@@ -1,4 +1,4 @@
-import { lodash_helper, immutable, moment_helper } from './helper'
+import { lodash_helper, rxjs_helper, immutable, moment_helper } from './helper'
 import { observer, inject, } from 'mobx-react'
 
 
@@ -12,7 +12,6 @@ export const Imu = immutable
 export const getRes = function (res) {
   if (res) {
     return {
-      head: _.get(res, 'data.head') || _.get(res, 'head') || {},
       data: _.has(res, 'data.data.data') ? _.get(res, 'data.data.data') : (_.has(res, 'data.data') ? _.get(res, 'data.data') : (_.has(res, 'data') ? _.get(res, 'data') : res))
     }
   }
@@ -51,11 +50,19 @@ export const deepClone = (obj) => {
 }
 
 // ----------------------------项目适用
-export { toJS ,observable, action, runInAction} from 'mobx'
+export { toJS, observable, action, runInAction } from 'mobx'
 
 export const Inject = (func) => {
   return (c) => {
     return inject(func)(observer(c))
+  }
+}
+
+export const processResult = (payload, callback = (v) => v) => {
+  const data = getRes(payload)
+  if (!_.isFunction(callback)) return console.error('callback必须是函数')
+  if (resOk(data)) {
+    return callback(data.data)
   }
 }
 

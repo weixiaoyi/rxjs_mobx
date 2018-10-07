@@ -1,6 +1,9 @@
-import { resOk, getRes, _, observable, action, runInAction } from '@utils'
-import { getExample } from '@services/home'
+import { resOk, getRes, _, observable, action, runInAction, processResult } from '@utils'
+import { getExample1, getExample2 } from '@services/home'
 import ModelExtend from './ModelExtend'
+
+import { forkJoin } from 'rxjs'
+import { map, filter, switchMap } from 'rxjs/operators'
 
 export default class Home extends ModelExtend {
   constructor(rootStore) {
@@ -12,8 +15,24 @@ export default class Home extends ModelExtend {
     { name: '2' }
   ]
 
-  getExample = async () => {
-    const data = getRes(await getExample())
+  getExample = () => {
+    forkJoin(getExample1(), getExample2())
+      .pipe(map(v => {
+        return v.map(item => processResult(item))
+      }))
+      .subscribe(v => console.log(v))
+
+  }
+
+  getExample1 = async () => {
+    const data = getRes(await getExample1())
+    if (resOk(data)) {
+      this.changeModel('todos', _.get(data, 'data'))
+    }
+  }
+
+  getExample2 = async () => {
+    const data = getRes(await getExample2())
     if (resOk(data)) {
       this.changeModel('todos', _.get(data, 'data'))
     }

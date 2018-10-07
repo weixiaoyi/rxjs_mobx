@@ -3,7 +3,6 @@ import { _ } from '@utils'
 
 
 class MixinParent extends React.Component {
-
   constructor(props) {
     super(props)
     const { that } = this.props
@@ -37,7 +36,7 @@ class MixinChild extends React.Component {
     super(props)
     const { that = {} } = this.props
     that._isMounted = true
-    that.childInitStacks=[ ]
+    that.childInitStacks = []
     that.shouldComponentUpdate = ((nextProps, nextState) => {
       if (_.isEqual(nextProps, that.props) && _.isEqual(nextState, that.state)) {
         return false
@@ -52,7 +51,6 @@ class MixinChild extends React.Component {
       }
     }
   }
-
 
   componentDidMount() {
     this.startInit()
