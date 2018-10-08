@@ -1,8 +1,14 @@
 import { resOk, getRes, _, observable, action, runInAction, processResult, R } from '@utils'
-import { getExample1, getExample2 } from '@services/home'
+import { getExample1, getExample2, getExample3 } from '@services/home'
 import ModelExtend from './ModelExtend'
 
-const { forkJoin, map, from, race } = R
+const {
+  forkJoin, map,
+  from, race, catchError, tap, of, retry
+} = R
+
+let i = 0,
+  j = 1
 
 export default class Home extends ModelExtend {
   constructor(rootStore) {
@@ -19,14 +25,23 @@ export default class Home extends ModelExtend {
       .pipe(map(v => {
         return v.map(item => processResult(item))
       }))
-      .subscribe(([a, b]) => this.changeModel('todos', a.concat(b)))
+      .subscribe(([a, b]) => {
+        this.changeModel('todos', [
+          {
+            name: i++,
+          }
+        ])
+        return true
+      })
   }
 
   getExampleRace = () => {
     from(getExample1())
       .pipe(
-        race(getExample2()),
-        map(v => processResult(v)))
+        race(from(getExample2())),
+        map(v => processResult(v)),
+        tap(v => console.log(v))
+      )
       .subscribe(v => this.changeModel('todos', v))
   }
 

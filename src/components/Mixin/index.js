@@ -1,17 +1,37 @@
 import React from 'react'
 import { _ } from '@utils'
 
+const Init = (that, self) => {
+  that._isMounted = true
+  that.childInitStacks = []
+  that.shouldComponentUpdate = ((nextProps, nextState) => {
+    return !(_.isEqual(nextProps, that.props) && _.isEqual(nextState, that.state))
+  })
+  that.changeState = (payload = {}, callback) => {
+    if (that._isMounted) {
+      that.setState(payload, () => {
+        _.isFunction(callback) && callback()
+      })
+    }
+  }
+  that.componentDidMount = () => {
+    self.startInit()
+  }
+  that.componentWillUnmount = () => {
+    that._isMounted = false
+  }
+}
+
 
 class MixinParent extends React.Component {
   constructor(props) {
     super(props)
     const { that } = this.props
     that.childInitStacks = []
+    Init(that, this)
   }
 
-  componentDidMount() {
-    this.startInit()
-  }
+
 
   startInit = () => {
     const { that = {} } = this.props
@@ -35,29 +55,7 @@ class MixinChild extends React.Component {
   constructor(props) {
     super(props)
     const { that = {} } = this.props
-    that._isMounted = true
-    that.childInitStacks = []
-    that.shouldComponentUpdate = ((nextProps, nextState) => {
-      if (_.isEqual(nextProps, that.props) && _.isEqual(nextState, that.state)) {
-        return false
-      }
-      return true
-    })
-    that.changeState = (payload = {}, callback) => {
-      if (that._isMounted) {
-        that.setState(payload, () => {
-          _.isFunction(callback) && callback()
-        })
-      }
-    }
-  }
-
-  componentDidMount() {
-    this.startInit()
-  }
-
-  componentWillUnmount() {
-    this.props.that._isMounted = false
+    Init(that, this)
   }
 
   startInit = () => {
