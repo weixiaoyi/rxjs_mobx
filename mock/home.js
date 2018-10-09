@@ -2,7 +2,7 @@ const helper = require('./helper')
 
 module.exports = {
   'get /mock/example1': (req, res) => {
-    helper.delay(2000, () => {
+    helper.delay(500, () => {
       res.json({
         data: [
           { name: '3' },
@@ -14,7 +14,7 @@ module.exports = {
 
   },
   'get /mock/example2': (req, res) => {
-    helper.delay(4000, () => {
+    helper.delay(600, () => {
       res.json({
         data: [
           { name: '5' },

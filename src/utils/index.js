@@ -67,6 +67,11 @@ export const processResult = (payload, callback = (v) => v) => {
   }
 }
 
+export const createSubject = (type, callback) => {
+  const sub$ = new R.Subject()
+  return sub$
+}
+
 
 
 

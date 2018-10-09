@@ -4,7 +4,7 @@ import ModelExtend from './ModelExtend'
 
 const {
   forkJoin, map,
-  from, race, catchError, tap, of, retry
+  from, race, catchError, tap, of, retry, take,share
 } = R
 
 let i = 0
@@ -44,10 +44,15 @@ export default class Home extends ModelExtend {
       .subscribe(v => this.changeModel('todos', v))
   }
 
-  getExample1 = async () => {
+  getExample1 = async (v) => {
     const data = getRes(await getExample1())
     if (resOk(data)) {
-      this.changeModel('todos', _.get(data, 'data'))
+      this.changeModel('todos', [
+        {
+          name: v,
+        }
+      ])
+      return v
     }
   }
 

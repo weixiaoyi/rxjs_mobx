@@ -10,7 +10,7 @@ const Init = (that, self) => {
   that.changeState = (payload = {}, callback) => {
     if (that._isMounted) {
       that.setState(payload, () => {
-        _.isFunction(callback) && callback()
+        _.isFunction(callback) && callback(payload)
       })
     }
   }
@@ -30,7 +30,6 @@ class MixinParent extends React.Component {
     that.childInitStacks = []
     Init(that, this)
   }
-
 
 
   startInit = () => {

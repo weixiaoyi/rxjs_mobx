@@ -2,8 +2,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import store from 'store'
 import { fromJS, is } from 'immutable'
-import { forkJoin, from, of } from 'rxjs'
-import { map, race, retry, catchError, tap } from 'rxjs/operators'
+import { forkJoin, from, of, Subject, } from 'rxjs'
+import { map, race, retry, catchError, tap, take, share, debounceTime, takeWhile } from 'rxjs/operators'
 
 export const lodash_helper = {
   invert: _.invert,
@@ -50,6 +50,9 @@ export const lodash_helper = {
 }
 
 export const Rxjs_helper = {
+  takeWhile,
+  debounceTime,
+  take,
   from,
   forkJoin,
   catchError,
@@ -57,7 +60,9 @@ export const Rxjs_helper = {
   map,
   retry,
   tap,
-  of
+  of,
+  Subject,
+  share
 }
 
 export const localSave = {

@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
 import { Mixin } from '@components'
-import { Inject, toJS, isEqual, _ } from '@utils'
+import { Inject, toJS, isEqual, _, R, createSubject } from '@utils'
 import * as styles from './index.less'
+
+const {
+  forkJoin, map,
+  from, race, catchError, tap,
+  of, retry, take, Subject, share,
+  debounceTime, takeWhile
+} = R
 
 export default @Inject(({ homeStore: model }) => ({ model }))
 
@@ -10,42 +17,49 @@ class View extends Component {
     val: ''
   }
 
-  componentDidUpdate() {
-    const { model: { todos, todos_prev } } = this.props
-    console.log(JSON.stringify(toJS(todos_prev)),JSON.stringify(toJS(todos)), '----')
+  startInit = () => {
+    this.changeExample()
   }
 
-  startInit = () => {
+  changeExample = (v) => {
     const { model: { dispatch } } = this.props
-
-    setInterval(() => {
-      dispatch({
-          type: 'getExampleSync'
+    if (this.changeExample$) {
+      return this.changeExample$.next(v)
+    }
+    this.changeExample$ = createSubject()
+    this.changeExample$.pipe(
+      debounceTime(500),
+      takeWhile(v => this._isMounted)
+    )
+      .subscribe(v => {
+          dispatch({
+            type: 'getExample1',
+            payload: v
+          })
         }
       )
-    }, 2000)
   }
 
   render() {
+    const { changeExample } = this
     const { val } = this.state
     const { model: { todos } } = this.props
-    // console.log(toJS(todos))
     return (
       <Mixin.Parent that={this} >
         <div className={styles.home} >
           {
             todos.map((item, index) => (
-              <div key={index} onClick={() => {
-
-
-              }} >
+              <div key={index} >
                 {item.name}
               </div >
             ))
           }
           <input value={val} onChange={(e) => {
+            const value = e.target.value
             this.changeState({
-              val: e.target.value
+              val: value
+            }, () => {
+              changeExample(value)
             })
           }} />
         </div >

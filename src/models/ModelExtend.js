@@ -19,7 +19,7 @@ export default class ModelExtend {
   dispatch = (payloads = {}) => {
     const { type, payload } = payloads
     if (type && this[type]) {
-      this[type](payload)
+      return this[type](payload)
     } else {
       console.error('dispatch参数的type是必须参数,并且必须存在这个action')
     }
