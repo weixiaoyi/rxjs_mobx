@@ -4,7 +4,7 @@ import ModelExtend from './ModelExtend'
 
 const {
   forkJoin, map,
-  from, race, catchError, tap, of, retry, take,share
+  from, race, tap,
 } = R
 
 let i = 0

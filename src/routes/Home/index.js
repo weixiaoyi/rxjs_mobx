@@ -4,9 +4,6 @@ import { Inject, toJS, isEqual, _, R, createSubject } from '@utils'
 import * as styles from './index.less'
 
 const {
-  forkJoin, map,
-  from, race, catchError, tap,
-  of, retry, take, Subject, share,
   debounceTime, takeWhile
 } = R
 
