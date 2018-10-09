@@ -7,8 +7,7 @@ const {
   from, race, catchError, tap, of, retry
 } = R
 
-let i = 0,
-  j = 1
+let i = 0
 
 export default class Home extends ModelExtend {
   constructor(rootStore) {

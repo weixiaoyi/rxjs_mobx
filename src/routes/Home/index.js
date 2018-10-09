@@ -10,6 +10,11 @@ class View extends Component {
     val: ''
   }
 
+  componentDidUpdate() {
+    const { model: { todos, todos_prev } } = this.props
+    console.log(JSON.stringify(toJS(todos_prev)),JSON.stringify(toJS(todos)), '----')
+  }
+
   startInit = () => {
     const { model: { dispatch } } = this.props
 

@@ -9,6 +9,7 @@ export default class ModelExtend {
   @action
   changeModel = (k, v) => {
     if (k) {
+      this[`${k}_prev`] = this[k]
       this[k] = v
     } else {
       console.error('changeModel参数的k是必须参数')
