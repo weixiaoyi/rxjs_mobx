@@ -19,6 +19,10 @@ export default class Home extends ModelExtend {
     { name: '2' }
   ]
 
+  @observable loading = {
+    getExample1: false
+  }
+
   getExampleSync = () => {
     forkJoin(getExample1(), getExample2())
       .pipe(map(v => {
@@ -45,7 +49,7 @@ export default class Home extends ModelExtend {
   }
 
   getExample1 = async (v) => {
-    const data = getRes(await getExample1())
+    const data = getRes(await getExample1({ search: v }))
     if (resOk(data)) {
       this.changeModel('todos', [
         {

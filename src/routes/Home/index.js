@@ -40,9 +40,13 @@ class View extends Component {
   render() {
     const { changeExample } = this
     const { val } = this.state
-    const { model: { todos } } = this.props
+    const { model: { todos, loading } } = this.props
     return (
       <Mixin.Parent that={this} >
+        {
+          loading.getExample1 ? <div >loading...</div > : null
+        }
+
         <div className={styles.home} >
           {
             todos.map((item, index) => (

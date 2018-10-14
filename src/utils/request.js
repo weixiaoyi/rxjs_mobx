@@ -18,7 +18,6 @@ let interval = null
 
 
 export function request(url = '', options = {}) {
-
   const { method = 'get', formData = false, params, query, body, needLoop = false, needWatch = true, errHandler, ...rest } = options
   if (params) {
     const toPath = pathToRegexp.compile(url)
