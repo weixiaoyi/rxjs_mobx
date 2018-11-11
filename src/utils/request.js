@@ -30,12 +30,8 @@ export function request(url = '', options = {}) {
       return data
     }]
   } : {}
-  const token = undefined //  _.get(localSave.getUserInfo(), 'userToken')
   return axios({
     ...{
-      headers: {
-        ...(token ? { Authorization: token } : {})
-      },
       method,
       params: query,
       data: body,
@@ -56,14 +52,9 @@ export function request(url = '', options = {}) {
       if (_.has(error, 'response.status')) {
         switch (error.response.status) {
           case 401:
-            localSave.remove('userInfo')
             return Promise.reject(error)
           default:
         }
-      }
-      if (method === 'head') {
-        // 网络状态检测
-        return Promise.resolve(_.get(error, 'response.status'))
       }
       if (needWatch) {
         if (_.get(error, 'response.data.ret') === '100100'

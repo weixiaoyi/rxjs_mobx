@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Mixin } from '@components'
-import { Inject, toJS, isEqual, _, R, createSubject } from '@utils'
+import { Inject, R, createSubject } from '@utils'
 import * as styles from './index.less'
 
 const {

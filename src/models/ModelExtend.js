@@ -31,7 +31,7 @@ export default class ModelExtend {
           return res
         })
     } else {
-      console.error('dispatch参数的type是必须参数,并且必须存在这个action')
+      console.error('dispatch参数的type是必须参数,并且必须存在这个方法')
     }
   }
 }
