@@ -6,7 +6,9 @@ import * as styles from './index.less'
 export default @Inject(({ chatClub: model }) => ({ model }))
 
 class View extends Component {
-  state = {}
+  state = {
+    result: ''
+  }
 
   startInit = () => {
     const { model: { dispatch } } = this.props
@@ -18,6 +20,11 @@ class View extends Component {
         }
       }
     )
+      .then(data => {
+        this.changeState({
+          result: data
+        })
+      })
   }
 
 
@@ -25,7 +32,7 @@ class View extends Component {
     return (
       <Mixin.Parent that={this} >
         <div className={styles.chatClub} >
-          ahhah
+          {this.state.result ? this.state.result : '没有数据'}
         </div >
       </Mixin.Parent >
     )

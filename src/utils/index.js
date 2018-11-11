@@ -13,7 +13,7 @@ export const R = Rxjs_helper
 export const getRes = function (res) {
   if (res) {
     return {
-      data: _.has(res, 'data.data.data') ? _.get(res, 'data.data.data') : (_.has(res, 'data.data') ? _.get(res, 'data.data') : (_.has(res, 'data') ? _.get(res, 'data') : res))
+      data: _.get(res, 'data') || res
     }
   }
   return {
@@ -24,7 +24,7 @@ export const getRes = function (res) {
   }
 }
 
-export const resOk = (res, method) => {
+export const resOk = (res) => {
   if (_.isNil(res.data)) {
     return false
   }

@@ -16,12 +16,13 @@ export default class ChatClub extends ModelExtend {
   getExample1 = async ({ search }) => {
     const data = getRes(await getExample1({ search }))
     if (resOk(data)) {
+
       this.changeModel('todos', [
         {
           name: search,
         }
       ])
-      return data
+      return data.data
     }
   }
 }

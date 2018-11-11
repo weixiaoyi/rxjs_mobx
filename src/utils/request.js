@@ -42,10 +42,6 @@ export function request(url = '', options = {}) {
     ...rest
   })
     .then((res) => {
-      if (String(_.get(res, 'data.ret')) !== '0') {
-        if (method !== 'head') console.log('接口ret不为0，判断为错误')
-        return Promise.reject({ response: res })
-      }
       return res
     })
     .catch((error) => {
