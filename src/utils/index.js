@@ -72,6 +72,11 @@ export const createSubject = (type, callback) => {
   return sub$
 }
 
+export const formatJson = (string) => {
+  if (_.isObjectLike(string)) return string
+  return JSON.parse(string)
+}
+
 
 
 

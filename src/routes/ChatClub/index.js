@@ -1,17 +1,25 @@
 import React, { Component } from 'react'
 import { Mixin } from '@components'
-import { Inject } from '@utils'
+import { Inject, _ } from '@utils'
+import wss from '@services/socketClient'
+import ws2 from '@services/socketClient2'
 import * as styles from './index.less'
+
+const ws = wss.getSocket()
 
 export default @Inject(({ chatClub: model }) => ({ model }))
 
 class View extends Component {
   state = {
-    result: ''
+    result: '',
+    price: ''
   }
 
   startInit = () => {
     const { model: { dispatch } } = this.props
+    this.getPriceWs2()
+    this.getPriceWs()
+
     dispatch(
       {
         type: 'getExample1',
@@ -27,12 +35,43 @@ class View extends Component {
       })
   }
 
+  getPriceWs = () => {
+    ws.onConnectPromise()
+      .then(() => {
+        ws.sendJson({
+          subscribe: 'apple',
+        })
+      })
+
+    ws.listen({
+      name: 'price.update',
+      subscribe: (e, res) => {
+        this.changeState({
+          price: _.get(res, 'data.apple')
+        })
+      },
+      unsubscribe: () => {
+
+      },
+      restart: this.getPriceWs
+    })
+  }
+
+  getPriceWs2 = () => {
+    ws2.ws$.subscribe((data) => {
+      // console.log(data.data, 'ws2+++++++')
+    })
+  }
+
 
   render() {
     return (
       <Mixin.Parent that={this} >
         <div className={styles.chatClub} >
           {this.state.result ? this.state.result : '没有数据'}
+        </div >
+        <div >
+          价格：{this.state.price}
         </div >
       </Mixin.Parent >
     )
