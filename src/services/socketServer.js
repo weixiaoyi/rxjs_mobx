@@ -1,6 +1,10 @@
 import { Server } from 'mock-socket'
 import { _, } from '@utils'
 
+let i = 0
+let apple = 0
+let banana = 10000
+
 class MockServer {
   constructor(url) {
     this.clients = []
@@ -31,6 +35,14 @@ class MockServer {
       socket.on('close', () => {
         _.splice(this.clients, item => item.id === socket.id)
       })
+
+      if (i <= 1) {
+        setTimeout(() => {
+          i++
+          socket.close()
+          this.clients = []
+        }, 6000)
+      }
     })
   }
 
@@ -42,6 +54,7 @@ class MockServer {
   multiCastApple = (obj) => {
     this.broadCast(this.clients.filter(item => item.socket.apple), obj)
   }
+
   multiCastBanana = (obj) => {
     this.broadCast(this.clients.filter(item => item.socket.banana), obj)
   }
@@ -49,13 +62,13 @@ class MockServer {
   handleApple = (client, data) => {
     client.apple = !!data.subscribe
   }
+
   handleBanana = (client, data) => {
     client.banana = !!data.subscribe
   }
 }
 
-let apple = 0
-let banana = 10000
+
 const mockServer = new MockServer('ws://api.weixiaoyi/ws')
 setInterval(() => {
   mockServer.multiCastApple({
@@ -68,5 +81,5 @@ setInterval(() => {
       banana: banana--,
     }
   })
-}, 3000)
+}, 1000)
 

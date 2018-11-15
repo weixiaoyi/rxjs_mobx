@@ -18,7 +18,7 @@ class View extends Component {
   startInit = () => {
     const { model: { dispatch } } = this.props
     this.getPriceWs2()
-    this.getPriceWs()
+    // this.getPriceWs()
 
     dispatch(
       {
@@ -58,8 +58,12 @@ class View extends Component {
   }
 
   getPriceWs2 = () => {
-    ws2.ws$.subscribe((data) => {
-      // console.log(data.data, 'ws2+++++++')
+    const s=ws2.send({
+      subscribe: 'apple',
+    }).subscribe(([e,data]) => {
+      this.changeState({
+        price:data.data.apple
+      })
     })
   }
 
