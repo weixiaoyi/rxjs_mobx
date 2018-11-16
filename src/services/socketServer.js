@@ -36,7 +36,7 @@ class MockServer {
         _.splice(this.clients, item => item.id === socket.id)
       })
 
-      if (i <= 1) {
+      if (i < 1) {
         setTimeout(() => {
           i++
           socket.close()

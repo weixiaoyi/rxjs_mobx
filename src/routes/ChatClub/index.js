@@ -5,7 +5,7 @@ import wss from '@services/socketClient'
 import ws2 from '@services/socketClient2'
 import * as styles from './index.less'
 
-const ws = wss.getSocket()
+// const ws = wss.getSocket()
 
 export default @Inject(({ chatClub: model }) => ({ model }))
 
@@ -35,27 +35,27 @@ class View extends Component {
       })
   }
 
-  getPriceWs = () => {
-    ws.onConnectPromise()
-      .then(() => {
-        ws.sendJson({
-          subscribe: 'apple',
-        })
-      })
-
-    ws.listen({
-      name: 'price.update',
-      subscribe: (e, res) => {
-        this.changeState({
-          price: _.get(res, 'data.apple')
-        })
-      },
-      unsubscribe: () => {
-
-      },
-      restart: this.getPriceWs
-    })
-  }
+  // getPriceWs = () => {
+  //   ws.onConnectPromise()
+  //     .then(() => {
+  //       ws.sendJson({
+  //         subscribe: 'apple',
+  //       })
+  //     })
+  //
+  //   ws.listen({
+  //     name: 'price.update',
+  //     subscribe: (e, res) => {
+  //       this.changeState({
+  //         price: _.get(res, 'data.apple')
+  //       })
+  //     },
+  //     unsubscribe: () => {
+  //
+  //     },
+  //     restart: this.getPriceWs
+  //   })
+  // }
 
   getPriceWs2 = () => {
     const s=ws2.send({
