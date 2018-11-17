@@ -1,8 +1,8 @@
+import Ws from 'websocket-perfect'
 import { _, formatJson, } from '@utils'
 import { Subject } from 'rxjs'
-import { map } from 'rxjs/operators'
 
-class Ws {
+class Ws2 {
   constructor({ url, debug = true, buffer, bufferCount, beforeSend, afterSend, bufferWhen }) {
     this._config = {
       debug,

@@ -4,7 +4,7 @@ import { Mixin } from '@components'
 import { Inject, _ } from '@utils'
 import ws2 from '@services/socketClient2'
 import * as styles from './index.less'
-import { map } from 'rxjs/operators'
+import { map, filter } from 'rxjs/operators'
 
 
 export default @Inject(({ chatClub: model }) => ({ model }))
@@ -43,27 +43,24 @@ class View extends Component {
       subscribe: 'apple',
     })
       .subscribe(([e, data]) => {
-        if (data.apple) {
-          this.changeState({
-            apple: data.apple
-          })
-        }
+        this.changeState({
+          apple: data.apple
+        })
       })
 
     ws2.send({
       subscribe: 'banana',
-    }).pipe(
-      map(v => {
-        console.log(v,'=============')
-        return v
-      })
-    )
+    })
+      .pipe(
+        filter(v => {
+          return v[1].banana
+        })
+      )
       .subscribe(([e, data]) => {
-        if (data.banana) {
-          this.changeState({
-            banana: data.banana
-          })
-        }
+        console.log(data, '=============')
+        this.changeState({
+          banana: data.banana
+        })
       })
   }
 
