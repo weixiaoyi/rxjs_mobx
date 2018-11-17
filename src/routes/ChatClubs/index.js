@@ -4,64 +4,28 @@ import { Mixin } from '@components'
 import { Inject, _ } from '@utils'
 import ws2 from '@services/socketClient2'
 import * as styles from './index.less'
-import { map } from 'rxjs/operators'
-
 
 export default @Inject(({ chatClub: model }) => ({ model }))
 
 class View extends Component {
   state = {
     result: '',
-    price: '',
-    apple: '',
-    banana: ''
+    price: ''
   }
 
   startInit = () => {
     const { model: { dispatch } } = this.props
     this.getPriceWs2()
-
-    dispatch(
-      {
-        type: 'getExample1',
-        payload: {
-          search: 'ahha'
-        }
-      }
-    )
-      .then(data => {
-        this.changeState({
-          result: data
-        })
-      })
   }
 
-
   getPriceWs2 = () => {
-
-    ws2.send({
-      subscribe: 'apple',
-    })
-      .subscribe(([e, data]) => {
-        if (data.apple) {
-          this.changeState({
-            apple: data.apple
-          })
-        }
-      })
-
-    ws2.send({
+    const s = ws2.send({
       subscribe: 'banana',
-    }).pipe(
-      map(v => {
-        console.log(v,'=============')
-        return v
-      })
-    )
+    })
       .subscribe(([e, data]) => {
         if (data.banana) {
           this.changeState({
-            banana: data.banana
+            price: data.banana
           })
         }
       })
@@ -71,16 +35,12 @@ class View extends Component {
   render() {
     return (
       <Mixin.Parent that={this} >
-
-        <Link to="/chatclubs" >chatclubs</Link >
-        <div >当前chatclub-------------</div >
+        <Link to="/" >chatclub</Link >
         <div className={styles.chatClub} >
           {this.state.result ? this.state.result : '没有数据'}
         </div >
         <div >
-          apple：{this.state.apple}
-          <div />
-          banana:{this.state.banana}
+          价格：{this.state.price}
         </div >
       </Mixin.Parent >
     )

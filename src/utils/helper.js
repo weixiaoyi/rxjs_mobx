@@ -46,7 +46,8 @@ export const lodash_helper = {
   isString: _.isString,
   cloneDeep: _.cloneDeep,
   uniqueId: _.uniqueId,
-  isFunction: _.isFunction
+  isFunction: _.isFunction,
+  isInteger: _.isInteger
 }
 
 export const Rxjs_helper = {

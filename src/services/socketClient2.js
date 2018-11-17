@@ -1,110 +1,147 @@
 import { _, formatJson, } from '@utils'
-import { Subject, } from 'rxjs'
+import { Subject } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 class Ws {
-  constructor({ url, buffer = null, interceptor = v => v, beforeSend, afterSend, bufferWhen }) {
-    this.config = {
+  constructor({ url, debug = true, buffer, bufferCount, beforeSend, afterSend, bufferWhen }) {
+    this._config = {
+      debug,
       url,
       buffer,
-      interceptor,
+      bufferCount,
       bufferWhen,
       beforeSend,
-      afterSend
+      afterSend,
     }
-    this.subscribeRecords = []
-    this.promises = []
-    this.ws$ = new Subject()
-    this.ws = this.createWebsocket()
+    this._subscribeRecords = []
+    this._promises = []
+    this._ws$ = new Subject()
+    this._ws = this._createWebsocket()
+    this._interceptor = {}
   }
 
-  createWebsocket = () => {
-    const { url } = this.config
+  _clearAll = () => {
+    this._subscribeRecords = []
+    this._promises = []
+  }
+
+  _createWebsocket = () => {
+    const { url } = this._config
     const ws = new WebSocket(url)
     ws.onopen = () => {
-      console.log(`${url}连接开启.....`)
-      if (this.subscribeRecords.length) {
-        this.subscribeRecords.forEach(item => this.sendJson(undefined, item))
+      this._debug(`${url}连接开启.....`)
+      if (this._subscribeRecords.length) {
+        this._subscribeRecords.forEach(item => this._sendJson(undefined, item))
       }
-      if (this.promises.length) {
-        this.promises.forEach(item => this.sendJson(undefined, item))
-        this.promises = []
+      if (this._promises.length) {
+        this._promises.forEach(item => this._sendJson(undefined, item))
+        this._promises = []
       }
     }
     ws.onmessage = (e) => {
-      this.ws$.next([e, formatJson(e.data)])
+      if (!this._ws$.closed) {
+        let result = [e, formatJson(e.data)]
+        if (_.isFunction(this._interceptor.after)) result = this._interceptor.after(result)
+        this._ws$.next(result)
+      }
     }
     ws.onclose = (e) => {
-      console.log(`${url}连接关闭...`, e)
-      this.repeatConnect(e)
+      this._debug(`${url}连接关闭...`, e)
+      this._repeatConnect(e)
     }
     ws.onerror = (e) => {
-      console.log(`${url}连接错误`, e)
+      this._debug(`${url}连接错误`, e)
       // 连接错误自动会促发连接关闭，这里不需要再次连接
     }
     return ws
   }
 
-  hasConnected = () => {
-    return this.ws.readyState === 1
+  _hasConnected = () => {
+    return this._ws.readyState === 1
   }
 
-  sendJson = (message, obj) => {
-    const { afterSend } = this.config
-    this.ws.send(JSON.stringify(obj))
+  _sendJson = (message, obj) => {
+    const { afterSend } = this._config
+    this._ws.send(JSON.stringify(obj))
     if (_.isFunction(afterSend)) {
       afterSend(message, obj)
     }
   }
 
-  bufferWhen = (message, obj) => {
-    const { bufferWhen, buffer } = this.config
+  _bufferWhen = (message, obj) => {
+    const { bufferWhen, buffer } = this._config
+    if (buffer === true || buffer === false) {
+      return buffer
+    }
     if (_.isFunction(bufferWhen)) {
       return bufferWhen(message, obj)
     }
-    return buffer === true || (buffer !== false && obj._buffer === true)
+    return obj._buffer === true
   }
 
   send = (message = {}) => {
     try {
       let obj = _.cloneDeep(message)
-      const { interceptor, buffer, beforeSend } = this.config
-      if (_.isFunction(interceptor)) obj = interceptor(obj)
+      const { bufferCount, beforeSend } = this._config
+      if (_.isFunction(this._interceptor.before)) obj = this._interceptor.before(obj)
       if (!_.isObject(obj)) throw('send的参数或经interceptor处理后的结果必须是对象格式')
-      if (this.bufferWhen(message, obj)) {
-        this.subscribeRecords.push(obj)
+      const [clone_message, clone_obj] = [_.cloneDeep(message), _.cloneDeep(obj)]
+      if (this._bufferWhen(clone_message, clone_obj)) {
+        this._subscribeRecords.push(obj)
       }
-      if (_.isNumber(buffer) && buffer) {
-        this.subscribeRecords = this.subscribeRecords.slice(-1, -Number(buffer))
+      if (this._subscribeRecords.length && bufferCount && _.isInteger(bufferCount)) {
+        this._subscribeRecords = this._subscribeRecords.slice(-bufferCount)
       }
       if (_.isFunction(beforeSend)) {
-        beforeSend(message, obj)
+        beforeSend(clone_message, clone_obj)
       }
-      if (!this.hasConnected()) {
-        this.promises.push(obj)
+      if (!this._hasConnected()) {
+        this._promises.push(obj)
       } else {
-        this.sendJson(message, obj)
+        this._sendJson(clone_message, clone_obj)
       }
     } catch ( error ) {
       console.error(error)
     }
-    return this.ws$
+    return this._ws$
   }
 
+  interceptor = (before, after) => {
+    this._interceptor.before = before
+    this._interceptor.after = after
+  }
 
-  repeatConnect = (e) => {
+  unsubscribe = () => {
+    this._clearAll()
+    this._ws$.unsubscribe()
+  }
+
+  close = () => {
+    this._ws.close(4000, 'selfClose')
+  }
+
+  _repeatConnect = (e) => {
     if (e.type === 'close' || e.type === 'error') {
-      if (_.get(e, 'reason') === 'selfClose') return console.log('主动断开')
-      this.ws = this.createWebsocket()
+      if (_.get(e, 'reason') === 'selfClose') return this._debug('主动断开', e)
+      this._ws = this._createWebsocket()
     }
   }
 
-
-  close = () => {
-    this.ws.close(4000, 'selfClose')
+  _debug = (...params) => {
+    const { debug } = this._config
+    debug && console.log(...params)
   }
 }
 
-export default new Ws({
+const ws = new Ws({
   url: 'ws://api.weixiaoyi/ws',
-  buffer: true
+  buffer: true,
+  bufferCount: 2,
+  debug: true
 })
+
+ws.interceptor(v => v, ([e, data]) => {
+  return [e, data.data]
+})
+
+export default ws

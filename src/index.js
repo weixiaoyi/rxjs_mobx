@@ -1,10 +1,10 @@
+import '@babel/polyfill';
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
 import { configure } from 'mobx'
 import '@services/socketServer'
-import { default as Home } from '@routes/Home'
-import { default as ChatClub } from '@routes/ChatClub'
+import App from '@routes/App'
 import { default as store } from './models'
 import './index.less'
 import * as serviceWorker from './serviceWorker'
@@ -15,6 +15,6 @@ configure({ enforceActions: 'always' })
 
 
 ReactDOM.render(
-  <Provider {...store}><ChatClub /></Provider >,
+  <Provider {...store}><App /></Provider >,
   document.getElementById('root'))
 serviceWorker.unregister()
