@@ -42,6 +42,11 @@ class View extends Component {
     ws2.send({
       subscribe: 'apple',
     })
+      .pipe(
+        filter(v => {
+          return v[1].apple
+        })
+      )
       .subscribe(([e, data]) => {
         this.changeState({
           apple: data.apple
@@ -57,7 +62,7 @@ class View extends Component {
         })
       )
       .subscribe(([e, data]) => {
-        console.log(data, '=============')
+
         this.changeState({
           banana: data.banana
         })
@@ -70,7 +75,7 @@ class View extends Component {
       <Mixin.Parent that={this} >
 
         <Link to="/chatclubs" >chatclubs</Link >
-        <div >当前chatclub-------------</div >
+        <div >当前chatcl------------</div >
         <div className={styles.chatClub} >
           {this.state.result ? this.state.result : '没有数据'}
         </div >

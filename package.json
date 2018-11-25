@@ -2,6 +2,7 @@
   "name": "rxjs_mobx",
   "version": "0.1.0",
   "private": true,
+  "homepage":".",
   "scripts": {
     "start": "node config/scripts/start.js",
     "build": "node config/scripts/build.js",
