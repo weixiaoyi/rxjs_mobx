@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { Mixin } from '@components'
-import { Inject, _ } from '@utils'
+import { _, Inject } from '@utils'
 import ws2 from '@services/socketClient2'
 import * as styles from './index.less'
-import { map, filter } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators'
 
 
 export default @Inject(({ chatClub: model }) => ({ model }))
 
-class View extends Component {
+class ChatClub extends Mixin.Custom {
   state = {
     result: '',
     price: '',
@@ -17,28 +17,28 @@ class View extends Component {
     banana: ''
   }
 
+
   startInit = () => {
     const { model: { dispatch } } = this.props
     this.getPriceWs2()
-
-    dispatch(
-      {
-        type: 'getExample1',
-        payload: {
-          search: 'ahha'
-        }
-      }
-    )
-      .then(data => {
-        this.changeState({
-          result: data
-        })
-      })
+    //
+    // dispatch(
+    //   {
+    //     type: 'getExample1',
+    //     payload: {
+    //       search: 'ahha'
+    //     }
+    //   }
+    // )
+    //   .then(data => {
+    //     this.changeState({
+    //       result: data
+    //     })
+    //   })
   }
 
 
   getPriceWs2 = () => {
-
     ws2.send({
       subscribe: 'apple',
     })
@@ -62,7 +62,6 @@ class View extends Component {
         })
       )
       .subscribe(([e, data]) => {
-
         this.changeState({
           banana: data.banana
         })
@@ -71,20 +70,20 @@ class View extends Component {
 
 
   render() {
-    return (
-      <Mixin.Parent that={this} >
 
+    return (
+      <div >
         <Link to="/chatclubs" >chatclubs</Link >
         <div >当前chatcl------------</div >
         <div className={styles.chatClub} >
-          {this.state.result ? this.state.result : '没有数据'}
+          {this.state.result ? this.state.result : '没有数据hahah'}
         </div >
         <div >
           apple：{this.state.apple}
           <div />
           banana:{this.state.banana}
         </div >
-      </Mixin.Parent >
+      </div >
     )
   }
 }

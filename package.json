@@ -2,7 +2,7 @@
   "name": "rxjs_mobx",
   "version": "0.1.0",
   "private": true,
-  "homepage":".",
+  "homepage": ".",
   "scripts": {
     "start": "node config/scripts/start.js",
     "build": "node config/scripts/build.js",
@@ -74,6 +74,7 @@
     "react-dev-utils": "^6.0.4",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
+    "ssh2": "^0.6.1",
     "style-loader": "0.23.0",
     "terser-webpack-plugin": "1.1.0",
     "url-loader": "1.1.1",

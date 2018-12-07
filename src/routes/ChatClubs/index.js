@@ -7,7 +7,7 @@ import * as styles from './index.less'
 
 export default @Inject(({ chatClub: model }) => ({ model }))
 
-class View extends Component {
+class View extends Mixin.Custom {
   state = {
     result: '',
     price: ''
@@ -34,7 +34,7 @@ class View extends Component {
 
   render() {
     return (
-      <Mixin.Parent that={this} >
+      <div>
         <Link to="/" >chatclub</Link >
         <div className={styles.chatClub} >
           {this.state.result ? this.state.result : '没有数据'}
@@ -42,7 +42,7 @@ class View extends Component {
         <div >
           价格：{this.state.price}
         </div >
-      </Mixin.Parent >
+      </div>
     )
   }
 }

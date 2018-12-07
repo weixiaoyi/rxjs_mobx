@@ -44,7 +44,7 @@ class MixinParent extends React.Component {
     const { children } = this.props
     return (
       <>
-      {children}
+        {children}
       </>
     )
   }
@@ -74,15 +74,40 @@ class MixinChild extends React.Component {
     const { children } = this.props
     return (
       <>
-      {children}
+        {children}
       </>
     )
   }
 }
 
+class MixinCustom extends React.Component {
+  constructor(props) {
+    super(props)
+    this._isMounted = true
+  }
+
+  componentDidMount() {
+    _.isFunction(this.startInit) && this.startInit()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
+  changeState = (payload = {}, callback) => {
+    if (this._isMounted) {
+      this.setState(payload, () => {
+        _.isFunction(callback) && callback(payload)
+      })
+    }
+  }
+}
+
+
 export default {
   Parent: MixinParent,
-  Child: MixinChild
+  Child: MixinChild,
+  Custom: MixinCustom
 }
 
 
