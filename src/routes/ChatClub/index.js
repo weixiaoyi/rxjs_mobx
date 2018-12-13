@@ -21,20 +21,17 @@ class ChatClub extends Mixin.Custom {
   startInit = () => {
     const { model: { dispatch } } = this.props
     this.getPriceWs2()
-    //
-    // dispatch(
-    //   {
-    //     type: 'getExample1',
-    //     payload: {
-    //       search: 'ahha'
-    //     }
-    //   }
-    // )
-    //   .then(data => {
-    //     this.changeState({
-    //       result: data
-    //     })
-    //   })
+    if(window.require){
+      const electron = window.require('electron');
+      const {ipcRenderer} = electron;
+      ipcRenderer.on('asynchronous-reply', (event, arg) => {
+        console.log(arg,'=========================') // prints "pong"
+      })
+      ipcRenderer.send('me', 'ping')
+    }
+
+    // console.log(ipcRenderer.sendSync('synchronous-message', 'ping')) // prints "pong"
+
   }
 
 
